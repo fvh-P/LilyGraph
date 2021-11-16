@@ -554,7 +554,7 @@ let options = {
       },
     },
     font: {
-      size: 20,
+      size: 40,
       face: "Tahoma",
     },
   },
@@ -623,11 +623,13 @@ network.on('doubleClick', (e) => {
   }
 });
 network.on('zoom', (e) => {
-  console.log
-  if (e.scale <= 0.45 && options.nodes.font.size !== 36) {
-    options.nodes.font.size = 36;
+  if (e.scale <= 0.30 && options.nodes.font.size !== 40) {
+    options.nodes.font.size = 40;
     network.setOptions(options);
-  } else if (e.scale > 0.45 && options.nodes.font.size !== 20) {
+  } else if (0.30 < e.scale && e.scale <= 0.50 && options.nodes.font.size !== 30) {
+    options.nodes.font.size = 30;
+    network.setOptions(options);
+  } else if (0.50 < e.scale && options.nodes.font.size !== 20) {
     options.nodes.font.size = 20;
     network.setOptions(options);
   }
