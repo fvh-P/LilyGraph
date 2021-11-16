@@ -34,7 +34,7 @@ var request = `
 PREFIX schema: <http://schema.org/>
 PREFIX lily: <https://lily.fvhp.net/rdf/IRIs/lily_schema.ttl#>
 
-SELECT ?name ?status ?isBoosted ?garden ?legion ?schild ?schutzengel ?pastSchild ?pastSchutzengel ?youngerSchwester ?olderSchwester ?pastYoungerSchwester ?pastOlderSchwester ?roomMate ?sibling ?relationship ?class
+SELECT ?s ?name ?status ?isBoosted ?garden ?legion ?schild ?schutzengel ?pastSchild ?pastSchutzengel ?youngerSchwester ?olderSchwester ?pastYoungerSchwester ?pastOlderSchwester ?roomMate ?sibling ?relationship ?class
 WHERE{
 VALUES ?class {lily:Lily lily:Character lily:Teacher}
 ?s a ?class;
@@ -71,6 +71,7 @@ xhr.abort();
 const lilynodes = responsedata.map((v, i) => {
   return {
     id: i,
+    slug: v.s.value.substring(v.s.value.lastIndexOf('/') + 1),
     label: v.name.value,
     shape: v.isBoosted === undefined ? 'dot' : v.isBoosted.value == 'true' ? 'star' : 'dot',
     borderWidth: 1.5,
@@ -109,8 +110,32 @@ const legionnodes = legions.map((v, i) => {
       face: "Tahoma",
     },
     size: 20,
-    mass: 3,
+    mass: 4,
   };
+});
+
+const gardens = uniq(responsedata.filter(x => x.garden).map(x => x.garden.value))
+const gardennodes = gardens.map((v, i) => {
+  return {
+    id: i+20000,
+    label: v,
+    shape: 'hexagon',
+    borderWidth: 1.5,
+    color: {
+      border: 'green',
+      background: 'lightgreen',
+      highlight: {
+        border: 'green',
+        background: 'lightgreen',
+      },
+    },
+    font: {
+      size: 36,
+      face: "Tahoma",
+    },
+    size: 50,
+    mass: 5,
+  }
 });
 
 const schild = responsedata.filter((v) => 'schild' in v);
@@ -358,30 +383,6 @@ const legionedges = legionlily.map((v) => {
   };
 });
 
-const gardens = uniq(responsedata.filter(x => x.garden).map(x => x.garden.value))
-const gardennodes = gardens.map((v, i) => {
-  return {
-    id: i+20000,
-    label: v,
-    shape: 'hexagon',
-    borderWidth: 1.5,
-    color: {
-      border: 'green',
-      background: 'lightgreen',
-      highlight: {
-        border: 'green',
-        background: 'lightgreen',
-      },
-    },
-    font: {
-      size: 36,
-      face: "Tahoma",
-    },
-    size: 50,
-    mass: 3,
-  }
-});
-
 const gargenlegions = legionnodes.map(n => {
   const garden = responsedata.find(x => x.garden && x.legion && x.legion.value === n.label).garden.value
   return {
@@ -579,23 +580,29 @@ const options = {
     enabled: true,
     minVelocity: 0.5,
     barnesHut: {
-      centralGravity: 0.2,
+      theta: 0.75,
+      centralGravity: 0.25,
       gravitationalConstant: -1000,
       springLength: 150,
       springConstant: 0.01,
     },
     forceAtlas2Based: {
-      centralGravity: 0.015,
-      springLength: 80,
+      centralGravity: 0.02,
+      gravitationalConstant: -1000,
+      springLength: 150,
       springConstant: 0.1,
     },
     repulsion: {
-      nodeDistance: 80,
+      nodeDistance: 200,
       centralGravity: 0.015,
-      springLength: 100,
-      springConstant: 0.1,
+      springLength: 150,
+      springConstant: 0.01,
     },
     solver: 'barnesHut',
+    timestep: 0.5,
+  },
+  layout: {
+    improvedLayout: false,
   },
   interaction: {
     navigationButtons: true,
@@ -605,3 +612,13 @@ const options = {
   height: window.innerHeight - 16 + 'px',
 };
 const network = new vis.Network(container, data, options);
+network.on('doubleClick', (e) => {
+  if (e.nodes.length) {
+    if (e.nodes[0] < 10000) {
+      // lily node
+      const slug = lilynodes.find(x => x.id === e.nodes[0]).slug;
+      const lemonadeUrl = `https://lemonade.lily.garden/lily/${slug}`;
+      window.open(lemonadeUrl);
+    }
+  }
+});
