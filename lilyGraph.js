@@ -106,7 +106,7 @@ const legionnodes = legions.map((v, i) => {
       },
     },
     font: {
-      size: 30,
+      size: 32,
       face: "Tahoma",
     },
     size: 20,
@@ -130,7 +130,7 @@ const gardennodes = gardens.map((v, i) => {
       },
     },
     font: {
-      size: 36,
+      size: 44,
       face: "Tahoma",
     },
     size: 50,
@@ -623,13 +623,13 @@ network.on('doubleClick', (e) => {
   }
 });
 network.on('zoom', (e) => {
-  if (e.scale <= 0.30 && options.nodes.font.size !== 40) {
+  if (e.scale <= 0.25 && options.nodes.font.size !== 40) {
     options.nodes.font.size = 40;
     network.setOptions(options);
-  } else if (0.30 < e.scale && e.scale <= 0.50 && options.nodes.font.size !== 30) {
+  } else if (0.25 < e.scale && e.scale <= 0.45 && options.nodes.font.size !== 30) {
     options.nodes.font.size = 30;
     network.setOptions(options);
-  } else if (0.50 < e.scale && options.nodes.font.size !== 20) {
+  } else if (0.45 < e.scale && options.nodes.font.size !== 20) {
     options.nodes.font.size = 20;
     network.setOptions(options);
   }
