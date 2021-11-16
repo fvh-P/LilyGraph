@@ -530,7 +530,7 @@ relationdata.forEach(r => {
 
 const fullnodes = lilynodes.concat(legionnodes).concat(gardennodes);
 __edges.forEach(e => {
-  e.title = e.title.join('<br>');
+  e.title = e.title.join('\n');
 });
 const fulledges = __edges.concat(legionedges).concat(gardenedges);
 const nodes = new vis.DataSet(fullnodes);
