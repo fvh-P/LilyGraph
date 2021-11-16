@@ -541,7 +541,7 @@ const data = {
   edges: edges
 };
 
-const options = {
+let options = {
   nodes: {
     shape: "dot",
     scaling: {
@@ -550,7 +550,7 @@ const options = {
       label: {
         min: 4,
         maxVisible: 48,
-        drawThreshold: 8,
+        drawThreshold: 6,
       },
     },
     font: {
@@ -620,5 +620,15 @@ network.on('doubleClick', (e) => {
       const lemonadeUrl = `https://lemonade.lily.garden/lily/${slug}`;
       window.open(lemonadeUrl);
     }
+  }
+});
+network.on('zoom', (e) => {
+  console.log
+  if (e.scale <= 0.45 && options.nodes.font.size !== 36) {
+    options.nodes.font.size = 36;
+    network.setOptions(options);
+  } else if (e.scale > 0.45 && options.nodes.font.size !== 20) {
+    options.nodes.font.size = 20;
+    network.setOptions(options);
   }
 });
