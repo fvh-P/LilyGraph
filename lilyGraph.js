@@ -519,7 +519,7 @@ relationdata.forEach(r => {
       title: r.relation.value !== '' ? [r.relation.value]: [],
       color: {
         color: 'darkgray',
-        highlight: 'darkgray',
+        highlight: 'crimson',
       },
       length: 150,
       physics: false,
