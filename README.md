@@ -8,4 +8,6 @@ https://graph.lily.fvhp.net
 
 ## データソース
 
-アサルトリリィ非公式データベース「[assaultlily-rdf](https://github.com/fvh-P/assaultlily-rdf)」が公開しているデータをAPI経由で取得して使用しています。
+アサルトリリィRDFデータベース「[LuciaDB](https://github.com/Assault-Lily/LuciaDB)」が CC BY-NC-SA 4.0 ライセンスで公開しているデータをAPI経由で取得して使用しています。
+
+それに伴い、本リポジトリのライセンスも CC BY-NC-SA 4.0 となります。

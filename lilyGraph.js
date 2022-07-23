@@ -3,7 +3,7 @@ const uniq = (array) => {
 };
 
 const lilyNodeBgColor = (lily) => {
-  if (lily.status && lily.status.value === 'alive' && lily.class && lily.class.value === 'https://lily.fvhp.net/rdf/IRIs/lily_schema.ttl#Teacher') {
+  if (lily.status && lily.status.value === 'alive' && lily.class && lily.class.value === 'https://luciadb.assaultlily.com/rdf/IRIs/lily_schema.ttl#Teacher') {
     return 'wheat'
   } else if (lily.status && lily.status.value === 'alive') {
     return 'paleturquoise';
@@ -13,7 +13,7 @@ const lilyNodeBgColor = (lily) => {
 };
 
 const lilyNodeBorderColor = (lily) => {
-  if (lily.class && lily.class.value === 'https://lily.fvhp.net/rdf/IRIs/lily_schema.ttl#Teacher') {
+  if (lily.class && lily.class.value === 'https://luciadb.assaultlily.com/rdf/IRIs/lily_schema.ttl#Teacher') {
     return 'saddlebrown';
   } else {
     return 'dodgerblue';
@@ -28,11 +28,11 @@ xhr.onload = function (e) {
     }
   }
 };
-xhr.open('POST', 'https://lily.fvhp.net/sparql/query?format=json', false);
+xhr.open('POST', 'https://luciadb.assaultlily.com/sparql/query?format=json', false);
 xhr.setRequestHeader('content-type', 'application/sparql-query;charset=UTF-8');
 var request = `
 PREFIX schema: <http://schema.org/>
-PREFIX lily: <https://lily.fvhp.net/rdf/IRIs/lily_schema.ttl#>
+PREFIX lily: <https://luciadb.assaultlily.com/rdf/IRIs/lily_schema.ttl#>
 
 SELECT ?s ?name ?status ?isBoosted ?garden ?legion ?schild ?schutzengel ?pastSchild ?pastSchutzengel ?youngerSchwester ?olderSchwester ?pastYoungerSchwester ?pastOlderSchwester ?roomMate ?sibling ?relationship ?class
 WHERE{
@@ -67,6 +67,24 @@ FILTER(!bound(?roomMate) || lang(?roomMate)="ja")
 xhr.send(request);
 const responsedata = response.results.bindings;
 xhr.abort();
+
+const url = "by-nc-sa.svg";
+
+const copyright = {
+  id: "copyright",
+  label: [
+    "このグラフを生成するためのデータは、LuciaDBによって",
+    "CC BY-NC-SA 4.0ライセンスのもとに提供されています。",
+  ].join("\n"),
+  widthConstraint: { minimum: 100 },
+  heightConstraint: { minimum: 40 },
+  x: 0,
+  y: 2800,
+  size: 50,
+  shape: "image",
+  image: url,
+  physics: false,
+};
 
 const lilynodes = responsedata.map((v, i) => {
   return {
@@ -419,11 +437,11 @@ const gardensingles = gardenlily.map((v) => {
 
 const gardenedges = gargenlegions.concat(gardensingles)
 
-xhr.open('POST', 'https://lily.fvhp.net/sparql/query?format=json', false);
+xhr.open('POST', 'https://luciadb.assaultlily.com/sparql/query?format=json', false);
 xhr.setRequestHeader('content-type', 'application/sparql-query;charset=UTF-8');
 request = `
 PREFIX schema: <http://schema.org/>
-PREFIX lily: <https://lily.fvhp.net/rdf/IRIs/lily_schema.ttl#>
+PREFIX lily: <https://luciadb.assaultlily.com/rdf/IRIs/lily_schema.ttl#>
 SELECT ?from ?to ?relation
 WHERE{
 VALUES ?class {lily:Lily lily:Character lily:Teacher}
@@ -465,11 +483,11 @@ sibling.forEach(r => {
 
 var __edges = schildedges.concat(schutzengeledges, pastSchildedges, pastSchutzengeledges, youngerSchwesteredges, olderSchwesteredges, pastYoungerSchwesteredges, pastOlderSchwesteredges, roomMateedges, siblingedges);
 
-xhr.open('POST', 'https://lily.fvhp.net/sparql/query?format=json', false);
+xhr.open('POST', 'https://luciadb.assaultlily.com/sparql/query?format=json', false);
 xhr.setRequestHeader('content-type', 'application/sparql-query;charset=UTF-8');
 request = `
 PREFIX schema: <http://schema.org/>
-PREFIX lily: <https://lily.fvhp.net/rdf/IRIs/lily_schema.ttl#>
+PREFIX lily: <https://luciadb.assaultlily.com/rdf/IRIs/lily_schema.ttl#>
 SELECT ?from ?to ?relation
 WHERE{
 VALUES ?class {lily:Lily lily:Character lily:Teacher}
@@ -528,7 +546,7 @@ relationdata.forEach(r => {
   }
 });
 
-const fullnodes = lilynodes.concat(legionnodes).concat(gardennodes);
+const fullnodes = lilynodes.concat(legionnodes).concat(gardennodes).concat([copyright]);
 __edges.forEach(e => {
   e.title = e.title.join('\n');
 });
